@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::Widget *ui;
+    void drawBoard();
 };
 
 #endif // WIDGET_H
