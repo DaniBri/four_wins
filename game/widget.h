@@ -3,9 +3,6 @@
 
 #include <QWidget>
 
-namespace Ui {
-class Widget;
-}
 
 class Widget : public QWidget
 {
@@ -16,8 +13,10 @@ public:
     ~Widget();
 
 private:
-    Ui::Widget *ui;
+
     void drawBoard();
+protected:
+    void paintEvent(QPaintEvent *e);
 };
 
 #endif // WIDGET_H
