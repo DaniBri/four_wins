@@ -1,0 +1,7 @@
+#ifndef GLOBALDEFINER_H
+#define GLOBALDEFINER_H
+
+#define NBR_HOLE_HOR 7
+#define NBR_HOLE_VER 6
+
+#endif // GLOBALDEFINER_H
