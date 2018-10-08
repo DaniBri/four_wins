@@ -64,19 +64,24 @@ void Display::drawBoard()
     // draw holes 7x6
     for (int i = 0; i < NBR_HOLE_HOR; ++i) {
         for (int j = 0; j < NBR_HOLE_VER; ++j) {
-            switch (this->field->getBoardAt(i,j)) {
-            case 0:
-                paintToken(i,j,Qt::white);
-                break;
-            case 1:
-                paintToken(i,j,Qt::yellow);
-                break;
-            case 2:
-                paintToken(i,j,Qt::red);
-                break;
-            default:
-                qDebug()<<"ERROR 001: No Valide data on Board";
-                break;
+            if(this->field != NULL){
+                switch (this->field->getBoardAt(i,j)) {
+                case 0:
+                    paintToken(i,j,Qt::white);
+                    break;
+                case 1:
+                    paintToken(i,j,Qt::yellow);
+                    break;
+                case 2:
+                    paintToken(i,j,Qt::red);
+                    break;
+                default:
+                    qDebug()<<"ERROR 001: No Valide data on Board";
+                    break;
+                }
+            }else
+            {
+                qDebug()<<"ERROR 003: No Gamefield known";
             }
         }
     }
@@ -85,13 +90,11 @@ void Display::drawBoard()
 
 void Display::paintEvent(QPaintEvent*)
 {
-    qDebug()<<"drawing";
     drawBoard();
 }
 
 void Display::mouseReleaseEvent(QMouseEvent *e)
 {
-    qDebug()<<"click at: "<<e->x();
     int column = round(e->x()*NBR_HOLE_HOR/DISPLAY_WIDTH);
     this->field->placeToken(column,player);
     if(this->player == 1)
