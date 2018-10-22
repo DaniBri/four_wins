@@ -3,5 +3,8 @@
 
 #define NBR_HOLE_HOR 7
 #define NBR_HOLE_VER 6
+#define NN_LAYER_NODES 16
+#define NN_BIASES_RANGE 8
+#define NN_WEIGHTS_RANGE 2
 
 #endif // GLOBALDEFINER_H

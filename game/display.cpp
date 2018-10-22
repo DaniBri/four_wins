@@ -1,10 +1,6 @@
 #include "display.h"
-#include "QPainter"
-#include "globaldefiner.h"
-#include "QDebug"
-#include "QMouseEvent"
 #include "gamefield.h"
-#include <cmath>
+
 
 #define HOLE_SIZE 32
 #define DISPLAY_WIDTH 320
@@ -26,10 +22,6 @@ Display::Display(QWidget *parent) :
     this->setWindowTitle("Four Wins");
     this->setAutoFillBackground(true);
     this->setPalette(pal);
-
-    //player starting
-    this->player = 1;
-
 }
 
 Display::~Display()
@@ -72,7 +64,7 @@ void Display::drawBoard()
                 case 1:
                     paintToken(i,j,Qt::yellow);
                     break;
-                case 2:
+                case -1:
                     paintToken(i,j,Qt::red);
                     break;
                 default:
@@ -96,9 +88,5 @@ void Display::paintEvent(QPaintEvent*)
 void Display::mouseReleaseEvent(QMouseEvent *e)
 {
     int column = round(e->x()*NBR_HOLE_HOR/DISPLAY_WIDTH);
-    this->field->placeToken(column,player);
-    if(this->player == 1)
-        player++;
-    else
-        player--;
+    this->field->dispAction(column);
 }

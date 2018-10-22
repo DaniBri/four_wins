@@ -1,19 +1,13 @@
 #include "gamefield.h"
 #include "display.h"
-#include "QDebug"
-#include <iostream>
+
 
 using namespace std;
 
 Gamefield::Gamefield()
 {
-    // init board
-    for (int i = 0; i < NBR_HOLE_HOR; ++i) {
-        for (int j = 0; j < NBR_HOLE_VER; ++j) {
-            this->board[i][j] = 0;
-        }
-    }
-
+    this->gamestate = PLAYER1;
+    initBoard();
 }
 
 Gamefield::~Gamefield()
@@ -28,21 +22,10 @@ bool Gamefield::placeToken(int column, int player)
         if(this->board[column][i] == 0)
         {
             this->board[column][i] = player;
-            displayBoard();
-            // update display if not know send msg error
-            if(this->display != NULL)
-            {
-                this->display->repaint();
-                winCondition(player);
-                return true;
-            }else
-            {
-                // MSG ERROR no display in relation
-                qDebug()<<"ERROR 002: No display known";
-                return false;
-            }
+            return true;
         }
     }
+    qDebug()<<"ERROR 006: Column Full";
     return false;
 }
 
@@ -56,7 +39,48 @@ int Gamefield::getBoardAt(int x, int y)
     return this->board[x][y];
 }
 
-void Gamefield::winCondition(int player)
+void Gamefield::initBoard()
+{
+    // init board
+    for (int i = 0; i < NBR_HOLE_HOR; ++i) {
+        for (int j = 0; j < NBR_HOLE_VER; ++j) {
+            this->board[i][j] = 0;
+        }
+    }
+}
+
+void Gamefield::dispAction(int column)
+{
+    switch (this->gamestate) {
+    case PLAYER1:
+        if(placeToken( column,  1))
+        {
+            gamestate = PLAYER2;
+        }
+        if(winCondition(1))
+        {
+            initBoard();
+            gamestate = PLAYER1;
+        }
+        break;
+    case PLAYER2:
+        if(placeToken( column,  -1))
+        {
+            gamestate = PLAYER1;
+        }
+        if(winCondition(-1))
+        {
+            initBoard();
+            gamestate = PLAYER1;
+        }
+        break;
+    default:
+        break;
+    }
+    this->display->repaint();
+}
+
+bool Gamefield::winCondition(int player)
 {
     bool won = false;
     int counter = 0;
@@ -147,18 +171,45 @@ void Gamefield::winCondition(int player)
     // send out msg if winner
     if(won)
     {
-        qDebug()<<"There is a winner!!!";
+        qDebug()<<"PLAYER"<<player<<"WINS!!!";
     }
+    return won;
 }
 
 void Gamefield::displayBoard()
 {
-    for(int i=0; i < NBR_HOLE_VER; i++)  // loop for  lines
+    for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
        {
-           for(int j=0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+           for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
            {
-               cout<<this->board[j][i];  // display the current element out of the array
+               cout << this->board[j][i];  // display the current element out of the array
            }
-       cout<<endl;  // when the inner loop is done, go to a new line
+       cout << endl;  // when the inner loop is done, go to a new line
        }
 }
+
+QVector<double> Gamefield::getInputs()
+{
+    QVector<double> result;
+
+    if (gamestate == PLAYER1) {
+        for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
+           {
+               for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+               {
+                   result.append(this->board[j][i]);
+               }
+           }
+    }else if (gamestate == PLAYER1) {
+        for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
+           {
+               for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+               {
+                   result.append(-this->board[j][i]);
+               }
+           }
+    }
+
+    return result;
+}
+
