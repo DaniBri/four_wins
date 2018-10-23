@@ -6,5 +6,6 @@
 #define NN_LAYER_NODES 16
 #define NN_BIASES_RANGE 8
 #define NN_WEIGHTS_RANGE 2
+#define MOVES_TIMEOUT 100
 
 #endif // GLOBALDEFINER_H

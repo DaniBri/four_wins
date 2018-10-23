@@ -1,6 +1,6 @@
 #include "display.h"
 #include "gamefield.h"
-
+#include "fighter.h"
 
 #define HOLE_SIZE 32
 #define DISPLAY_WIDTH 320
@@ -45,6 +45,30 @@ void Display::initRelations(Gamefield *field)
     this->field=field;
 }
 
+void Display::initRelationAI1(Fighter *someAI)
+{
+    this->opponent1 = someAI;
+}
+
+void Display::initRelationAI2(Fighter *someAI)
+{
+    this->opponent2 = someAI;
+}
+
+// 0 = draw/ongoing, 1=p1 win, 2 = p2 win
+int Display::simClick()
+{
+    int winner = 0;
+    if(this->opponent1 != NULL){
+        winner = this->opponent1->aiPlayOnce();
+    }
+    if(this->opponent2 != NULL){
+        if(winner == 0)
+            winner = this->opponent2->aiPlayOnce();
+    }
+    return winner;
+}
+
 void Display::drawBoard()
 {
     // drawing basic lines of board
@@ -87,6 +111,16 @@ void Display::paintEvent(QPaintEvent*)
 
 void Display::mouseReleaseEvent(QMouseEvent *e)
 {
-    int column = round(e->x()*NBR_HOLE_HOR/DISPLAY_WIDTH);
-    this->field->dispAction(column);
+    int playerBefore = this->field->getState();
+    //managing what ai to play on click
+    if(this->opponent1 != NULL){
+        this->opponent1->aiPlayOnce();
+        if(playerBefore != this->field->getState())
+            return;
+    }
+
+    // if ai is missing user can play
+    int column = round(e->x() * NBR_HOLE_HOR/DISPLAY_WIDTH);
+    this->field->action(column);
+
 }

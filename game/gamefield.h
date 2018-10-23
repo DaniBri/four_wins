@@ -19,19 +19,20 @@ public:
 
     void initRelations(Display* disp);
     int getBoardAt(int x, int y);
-    void dispAction(int column);
+    int action(int column);
     QVector<double> getInputs();
-    bool placeToken(int column, int player);
+    void displayBoard();
+    void resetField();
+    int getState();
 
 private:
     Phase gamestate;
     int board[NBR_HOLE_HOR][NBR_HOLE_VER];
     Display* display;
-
     void initBoard();
-
+    bool placeToken(int column, int player);
     bool winCondition(int player);
-    void displayBoard();
+
 
 
 };

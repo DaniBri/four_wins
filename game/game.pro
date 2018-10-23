@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     gamefield.cpp \
     nn_ai.cpp \
     layer.cpp \
-    manager.cpp
+    manager.cpp \
+    fighter.cpp
 
 HEADERS  += \
     display.h \
@@ -36,4 +37,5 @@ HEADERS  += \
     globaldefiner.h \
     nn_ai.h \
     layer.h \
-    manager.h
+    manager.h \
+    fighter.h

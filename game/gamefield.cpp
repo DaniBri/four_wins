@@ -6,8 +6,7 @@ using namespace std;
 
 Gamefield::Gamefield()
 {
-    this->gamestate = PLAYER1;
-    initBoard();
+    resetField();
 }
 
 Gamefield::~Gamefield()
@@ -22,16 +21,17 @@ bool Gamefield::placeToken(int column, int player)
         if(this->board[column][i] == 0)
         {
             this->board[column][i] = player;
+            // remove comments to see step by step in consol
+            //displayBoard();
             return true;
         }
     }
-    qDebug()<<"ERROR 006: Column Full";
     return false;
 }
 
 void Gamefield::initRelations(Display *disp)
 {
-    this->display=disp;
+    this->display = disp;
 }
 
 int Gamefield::getBoardAt(int x, int y)
@@ -49,8 +49,12 @@ void Gamefield::initBoard()
     }
 }
 
-void Gamefield::dispAction(int column)
+
+// -1 = draw, 0 = game ongoing, 1 = p1 won, 2 = p2 won
+int Gamefield::action(int column)
 {
+    int result = 0;
+    //trying to place token in fiven column
     switch (this->gamestate) {
     case PLAYER1:
         if(placeToken( column,  1))
@@ -61,6 +65,7 @@ void Gamefield::dispAction(int column)
         {
             initBoard();
             gamestate = PLAYER1;
+            result = 1;
         }
         break;
     case PLAYER2:
@@ -72,12 +77,33 @@ void Gamefield::dispAction(int column)
         {
             initBoard();
             gamestate = PLAYER1;
+            result = 2;
         }
         break;
     default:
+        result = -1;
         break;
     }
+
+    //in case of full board ends in draw
+    bool boardfull = true;
+    for (int i = 0; i < NBR_HOLE_VER; ++i) {
+        for (int j = 0; j < NBR_HOLE_HOR; ++j) {
+            if(this->board[j][i] == 0)
+            {
+                boardfull = false;
+            }
+        }
+    }
+    if(boardfull)
+    {
+        qDebug()<<"Board Full";
+        initBoard();
+        gamestate = PLAYER1;
+        result = -1;
+    }
     this->display->repaint();
+    return result;
 }
 
 bool Gamefield::winCondition(int player)
@@ -166,26 +192,40 @@ bool Gamefield::winCondition(int player)
             }
         }
     }
-
-
-    // send out msg if winner
-    if(won)
-    {
-        qDebug()<<"PLAYER"<<player<<"WINS!!!";
-    }
     return won;
 }
 
 void Gamefield::displayBoard()
 {
     for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
-       {
-           for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
-           {
-               cout << this->board[j][i];  // display the current element out of the array
-           }
-       cout << endl;  // when the inner loop is done, go to a new line
-       }
+    {
+        for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+        {
+            switch (this->board[j][i]) { // display the current element out of the array
+            case 1:
+                cout << 1;
+                break;
+            case -1:
+                cout << 2;
+                break;
+            default:
+                cout << 0;
+                break;
+            }
+        }
+        cout << endl;  // when the inner loop is done, go to a new line
+    }
+}
+
+void Gamefield::resetField()
+{
+    this->gamestate = PLAYER1;
+    initBoard();
+}
+
+int Gamefield::getState()
+{
+    return (int)this->gamestate;
 }
 
 QVector<double> Gamefield::getInputs()
@@ -194,20 +234,23 @@ QVector<double> Gamefield::getInputs()
 
     if (gamestate == PLAYER1) {
         for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
-           {
-               for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
-               {
-                   result.append(this->board[j][i]);
-               }
-           }
-    }else if (gamestate == PLAYER1) {
+        {
+            for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+            {
+                result.append(this->board[j][i]);
+            }
+        }
+        return result;
+    }
+    if (gamestate == PLAYER2) {
         for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
-           {
-               for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
-               {
-                   result.append(-this->board[j][i]);
-               }
-           }
+        {
+            for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+            {
+                result.append(-this->board[j][i]);
+            }
+        }
+        return result;
     }
 
     return result;
