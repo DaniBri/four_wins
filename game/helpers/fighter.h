@@ -1,8 +1,8 @@
 #ifndef FIGHTER_H
 #define FIGHTER_H
-#include "nn_ai.h"
+#include "ai/nn_ai.h"
 #include "QString"
-#include "gamefield.h"
+#include "basic/gamefield.h"
 
 
 class Fighter

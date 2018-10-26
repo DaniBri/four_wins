@@ -28,7 +28,7 @@ private:
     Gamefield* field;
     void initNetwork();     // randomize Value of Network
     QString networkToString();
-    bool check3Bussy(int x, int y, int z);
+    bool checkColumnFull(int x);
 
 };
 

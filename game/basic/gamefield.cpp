@@ -95,9 +95,9 @@ int Gamefield::action(int column)
             }
         }
     }
+
     if(boardfull)
     {
-        qDebug()<<"Board Full";
         initBoard();
         gamestate = PLAYER1;
         result = -1;
@@ -192,6 +192,9 @@ bool Gamefield::winCondition(int player)
             }
         }
     }
+
+    //if(won)
+    //qDebug()<<"player"<< player << "won";
     return won;
 }
 

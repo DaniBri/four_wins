@@ -1,8 +1,5 @@
 AI:
-Learning is wrong not 2 and then look who is best. get some pool down and 1 with highest winrate can live on.
-then do new pool with some rand in it and mostly tweeked winners
-----------
-Also change way weight and biases are changed. value shoudn't change to the absurd with gen 100k and so on
+fix pool size and pool per tournament issue
 
 Game:
 states/screens
@@ -10,3 +7,10 @@ states/screens
 Designe:
 Different Themes
 UI
+
+ERROR:
+after 3606 tournaments get error
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+?????
+--------

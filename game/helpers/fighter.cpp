@@ -23,6 +23,9 @@ void Fighter::loadAI(QString aiName)
     QFile file(QDir::currentPath() + "/" + aiName + ".txt");
     if (file.exists()) {
         ai.importNetwork(aiName);
+    }else
+    {
+        qDebug()<<"file doesn't exist";
     }
 }
 

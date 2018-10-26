@@ -1,6 +1,6 @@
 #include "display.h"
 #include "gamefield.h"
-#include "fighter.h"
+#include "helpers/fighter.h"
 
 #define HOLE_SIZE 32
 #define DISPLAY_WIDTH 320

@@ -34,12 +34,13 @@ void Layer::initLayer(int nodesNBR, int inputsNBR)
 
 double Layer::randRange(int min, int max)
 {
-    return  qrand() % ((max + 1) - min) + min;
+    double f = (double)rand() / RAND_MAX;
+    return min + f * (max - min);
 }
 
 double Layer::tweekValue()
 {
-    return randRange(-4,4)/10+randRange(-9,9)/100+randRange(-9,9)/1000;
+    return randRange(-1,1);
 }
 
 // makes summ of all given node weights*inputs
@@ -55,21 +56,41 @@ double Layer::calcInputWeights(QVector<double> inputs,int currentNode)
         }
     }else
     {
-        qDebug()<<"Nodes connection not matching weight numberkkkkkkk";
+        qDebug()<<"Nodes connection not matching weight number";
     }
     return result;
 }
 
 void Layer::tweekLayer()
 {
-    double temp;
+    double temp1;
+    double temp2;
     // tweek weight and bias
     for (int i = 0; i < nodes.size(); ++i) {
         for (int j = 0; j < this->nodes.at(i)->weights.size(); ++j) {
-            temp = this->nodes.at(i)->weights.at(j) + tweekValue();
-            this->nodes.at(i)->weights.replace(j,temp);
+            //changing weight and random
+            temp1 = this->nodes.at(i)->weights.at(j) + tweekValue();
+            this->nodes.at(i)->weights.replace(j,temp1);
         }
-        this->nodes.at(i)->bias += tweekValue();
+        //changing bias at random but still needs to be smaller then sum of weight
+        temp1 = this->nodes.at(i)->bias + tweekValue(); // representing new bias
+        temp2 = 0;                                      // sum of weights
+        for (int j = 0; j < this->nodes.at(i)->weights.size(); ++j) {
+            //get sum of weight from this node
+            temp2 += this->nodes.at(i)->weights.at(j);
+        }
+
+        //check if bias is valid
+        if(temp2 > temp1)
+        {
+            this->nodes.at(i)->bias = temp1;
+        }
+
+        // if current bias bigger then weighted sum correct it
+        if(this->nodes.at(i)->bias >= temp2)
+        {
+            this->nodes.at(i)->bias = temp2 - abs(tweekValue());
+        }
     }
 }
 

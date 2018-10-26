@@ -24,18 +24,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp \
-    display.cpp \
-    gamefield.cpp \
-    nn_ai.cpp \
-    layer.cpp \
-    manager.cpp \
-    fighter.cpp
+    basic/display.cpp \
+    basic/gamefield.cpp \
+    ai/nn_ai.cpp \
+    ai/layer.cpp \
+    helpers/manager.cpp \
+    helpers/fighter.cpp
 
 HEADERS  += \
-    display.h \
-    gamefield.h \
+    basic/display.h \
+    basic/gamefield.h \
     globaldefiner.h \
-    nn_ai.h \
-    layer.h \
-    manager.h \
-    fighter.h
+    ai/nn_ai.h \
+    ai/layer.h \
+    helpers/manager.h \
+    helpers/fighter.h

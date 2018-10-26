@@ -1,9 +1,9 @@
-#include "display.h"
-#include "gamefield.h"
-#include "manager.h"
+#include "basic/display.h"
+#include "basic/gamefield.h"
+#include "helpers/manager.h"
 #include <QApplication>
 #include "QDebug"
-#include "fighter.h"
+#include "helpers/fighter.h"
 
 
 
@@ -12,32 +12,34 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Display w;
     Gamefield g;
-    Manager aiManager;
-    aiManager.initRelations(&g);
+    Manager aiManager(&g);
     g.initRelations(&w);
     w.initRelations(&g);
     w.show();
 
     // true to creat ai with given generation number else ai fighting time!!!
-    bool training = 0;
+    // Note if training is done after training it is possible to make a 2 player mod
+    // if ai fighting each other is chosen it is posible to do player agains ai afterwards
+
+    bool training = 1;
     int trainings = 10;
-    int fights = 10000;
+    int fights = 100;
     // train AI else make them fight
     if(training)
     {
-        aiManager.playNGame(trainings,true);
+        aiManager.playNTournaments(trainings);
     }else
     {
         // load and Fight AI
         Fighter opponent1(0);
         opponent1.initRelations(&g);
         w.initRelationAI1(&opponent1);
-        opponent1.loadAI("gen10");
+        opponent1.loadAI("gen1k");
 
         Fighter opponent2(1);
         opponent2.initRelations(&g);
         w.initRelationAI2(&opponent2);
-        opponent2.loadAI("gen100k");
+        opponent2.loadAI("gen1k_2");
 
         // test run to compare opponents
         int ai1Vic = 0;
