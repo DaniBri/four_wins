@@ -38,6 +38,8 @@ void Display::paintToken(int column, int row, QColor color)
 
     // painting circle
     painter->drawEllipse(column*DISPLAY_WIDTH/NBR_HOLE_HOR+OFFSET_HOR,row*DISPLAY_HEIGHT/NBR_HOLE_VER+OFFSET_VER,HOLE_SIZE,HOLE_SIZE);
+
+    delete painter;
 }
 
 void Display::initRelations(Gamefield *field)

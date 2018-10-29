@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
     Display w;
     Gamefield g;
     Manager aiManager(&g);
+    Fighter opponent1(0);
+    Fighter opponent2(1);
     g.initRelations(&w);
     w.initRelations(&g);
     w.show();
@@ -22,8 +24,9 @@ int main(int argc, char *argv[])
     // if ai fighting each other is chosen it is posible to do player agains ai afterwards
 
     bool training = 1;
-    int trainings = 10;
-    int fights = 100;
+    bool player_vs_ai = true;
+    int trainings = 1000;
+    int fights = 200;
     // train AI else make them fight
     if(training)
     {
@@ -31,21 +34,21 @@ int main(int argc, char *argv[])
     }else
     {
         // load and Fight AI
-        Fighter opponent1(0);
+
         opponent1.initRelations(&g);
         w.initRelationAI1(&opponent1);
-        opponent1.loadAI("gen1k");
+        opponent1.loadAI("winnerAI");
 
-        Fighter opponent2(1);
+
         opponent2.initRelations(&g);
         w.initRelationAI2(&opponent2);
-        opponent2.loadAI("gen1k_2");
+        opponent2.loadAI("winnerAI");
 
         // test run to compare opponents
         int ai1Vic = 0;
         int ai2Vic = 0;
 
-        while(ai1Vic+ai2Vic != fights)
+        while(ai1Vic+ai2Vic != fights && !player_vs_ai)
         {
             switch (w.simClick()) {
             case 1:

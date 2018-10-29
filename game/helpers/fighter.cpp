@@ -22,7 +22,7 @@ void Fighter::loadAI(QString aiName)
     // preload a given AI file already existing in build path
     QFile file(QDir::currentPath() + "/" + aiName + ".txt");
     if (file.exists()) {
-        ai.importNetwork(aiName);
+        this->ai.importNetwork(aiName);
     }else
     {
         qDebug()<<"file doesn't exist";

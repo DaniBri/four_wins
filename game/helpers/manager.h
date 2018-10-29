@@ -16,8 +16,6 @@ public:
 private:
     NN_AI* ai1;
     NN_AI* ai2;
-    NN_AI* winnerAI;
-    QVector<NN_AI*> tournametsAI;
     Gamefield* field;
     bool player;
     int gameState;
@@ -25,13 +23,13 @@ private:
     bool playOneMove();
     int ai_place_token(int i);
     void initGame();
-    void initTournametsAI(NN_AI *model);
+    QVector<NN_AI *> initTournametsAI();
     void playGame();
-    NN_AI *playTournament(NN_AI *templateAI);
+    void playTournament();
     void showFieldToAI();
     NN_AI* poolFight(QVector<NN_AI*> ais, int start);
     void aiSwitchSides();
-    void clearTourAI();
+    void clearTourAI(QVector<NN_AI*> tournametsAI);
 };
 
 #endif // MANAGER_H

@@ -14,21 +14,22 @@ class NN_AI
 {
 public:
     NN_AI();
+    ~NN_AI();
     int calcOut(QVector<double> boardInput);          // send out answer
     void tweekNetwork();    // tweek Values of Network
     void randomizeNetwork(); // randomize Values of Network
     void printNetwork(QString filename);    // exporting Netwrok
     void importNetwork(QString filename);     // importing Network
+    void creatChild(QString mother,QString father);
     void initRelations(Gamefield* field);
 
 private:
-    Layer* layer1;
-    Layer* layer2;
-    Layer* layerOUT;
+    QVector<Layer*> layerVec;
     Gamefield* field;
     void initNetwork();     // randomize Value of Network
     QString networkToString();
     bool checkColumnFull(int x);
+    void importNetworkPartialy(QString filename);
 
 };
 

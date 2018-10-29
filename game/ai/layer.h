@@ -16,6 +16,7 @@ class Layer
 {
 public:
     Layer(int nodesNBR, int inputsNBR);
+    ~ Layer();
     void calcValues(QVector<double> inputs);      // calculate all values of the nodes according to theyr weights and biases
     void tweekLayer();
     void randomizeLayer();
@@ -23,6 +24,8 @@ public:
     QString getWeightsAndBias();
     void setWeights(QVector<QStringList> strings);
     void setBiases(QStringList strings);
+    void setWeightsPartialy(QVector<QStringList> strings);
+    void setBiasesPartialy(QStringList strings);
     double randRange(int min, int max);
 
 private:

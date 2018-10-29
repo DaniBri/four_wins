@@ -5,6 +5,14 @@ Layer::Layer(int nodesNBR, int inputsNBR)
     initLayer(nodesNBR,inputsNBR);
 }
 
+Layer::~Layer()
+{
+    while(!this->nodes.empty()){
+        delete this->nodes.at(0);
+        this->nodes.removeFirst();
+    }
+}
+
 void Layer::calcValues(QVector<double> inputs)
 {
     for (int i = 0; i < nodes.size(); ++i) {
@@ -23,7 +31,7 @@ void Layer::initLayer(int nodesNBR, int inputsNBR)
     for (int i = 0; i < nodesNBR; ++i) {
 
         // init new node
-        tempNode = new Nodes;
+        tempNode = new Nodes();
         tempNode->bias = randRange(-NN_BIASES_RANGE, NN_BIASES_RANGE);
         for (int i = 0; i < inputsNBR; ++i) {
             tempNode->weights.append(randRange(-NN_WEIGHTS_RANGE, NN_WEIGHTS_RANGE));
@@ -160,6 +168,39 @@ void Layer::setBiases(QStringList strings)
     if(strings.size() == nodes.size()){
         for (int i = 0; i < nodes.size(); ++i) {
             this->nodes.at(i)->bias = strings.at(i).toDouble(&ok);
+        }
+    }else
+    {
+        qDebug()<<"Amount of nodes and values do not match: Bias";
+    }
+}
+
+void Layer::setWeightsPartialy(QVector<QStringList> strings)
+{
+    QStringList templist;
+    if(strings.size() == nodes.size()){
+        //go past every node / full vector(list)
+        for (int i = 0; i < strings.size(); ++i) {
+            templist = strings.at(i);
+            //go past every weight / stringlist value
+            for (int j = 0; j < strings.at(i).size(); ++j) {
+                if(rand()%HERITAGE_RATE == 1)
+                    this->nodes.at(i)->weights.replace(j,templist.at(j).toDouble(&ok));
+
+            }
+        }
+    }else
+    {
+        qDebug()<<"Amount of nodes and values do not match: Weight";
+    }
+}
+
+void Layer::setBiasesPartialy(QStringList strings)
+{
+    if(strings.size() == nodes.size()){
+        for (int i = 0; i < nodes.size(); ++i) {
+            if(rand()%HERITAGE_RATE == 1)
+                this->nodes.at(i)->bias = strings.at(i).toDouble(&ok);
         }
     }else
     {

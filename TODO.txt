@@ -1,5 +1,10 @@
 AI:
 fix pool size and pool per tournament issue
+---------
+set a ratio of ai in pool. between rand ais and tweeked ais
+------------
+instead of killing previous ai who was winner in tourn keep it and modivy it with parameters from new best ai
+then in next tourn have new best, modified old best, random and tweeked new best,
 
 Game:
 states/screens
