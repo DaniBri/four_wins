@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
     Display w;
     Gamefield g;
     Manager aiManager(&g);
-    Fighter opponent1(0);
-    Fighter opponent2(1);
+    Fighter opponent1(0,&g);
+    Fighter opponent2(1,&g);
     g.initRelations(&w);
     w.initRelations(&g);
     w.show();
@@ -25,22 +25,18 @@ int main(int argc, char *argv[])
 
     bool training = 1;
     bool player_vs_ai = true;
-    int trainings = 1000;
+    int tournaments = 1000;
     int fights = 200;
     // train AI else make them fight
     if(training)
     {
-        aiManager.playNTournaments(trainings);
+        aiManager.playNTournaments(tournaments);
     }else
     {
         // load and Fight AI
-
-        opponent1.initRelations(&g);
         w.initRelationAI1(&opponent1);
         opponent1.loadAI("winnerAI");
 
-
-        opponent2.initRelations(&g);
         w.initRelationAI2(&opponent2);
         opponent2.loadAI("winnerAI");
 

@@ -26,7 +26,6 @@ void Manager::playNTournaments(int nbrOfTourns)
 void Manager::playGame()
 {
     int timeoutCounter = 0;
-    showFieldToAI();
     while(playOneMove())
     {
         timeoutCounter++;
@@ -60,11 +59,7 @@ void Manager::playTournament()
     clearTourAI(tournametsAI);
 }
 
-void Manager::showFieldToAI()
-{
-    this->ai1->initRelations(field);
-    this->ai2->initRelations(field);
-}
+
 
 // start is the position in vector where First ai of a pool is
 // Pool size min is defined in globaldefiner
@@ -144,7 +139,7 @@ NN_AI *Manager::poolFight(QVector<NN_AI*> ais, int start)
     }
 
     //send back winner
-    qDebug()<<"Pool:"<<start/POOL_PER_TOURNAMENT<<" Winner at"<<poolWinner;
+    //qDebug()<<"Pool:"<<start/POOL_PER_TOURNAMENT<<" Winner at"<<poolWinner;
     return poolAIs.at(poolWinner);
 }
 
@@ -228,7 +223,7 @@ QVector<NN_AI*> Manager::initTournametsAI()
     // load some given ai if in folder with winner name
     QFile file1(QDir::currentPath() + "/"+AI_WINNER_NAME+".txt");
     if (!file1.exists()) {
-        NN_AI temp;
+        NN_AI temp(field);
         temp.printNetwork(AI_WINNER_NAME);
     }
 
@@ -236,46 +231,48 @@ QVector<NN_AI*> Manager::initTournametsAI()
     for (int i = 0; i < POOL_PER_TOURNAMENT; ++i) {
 
         // copie main AI
-        aiPTR = new NN_AI();
+        aiPTR = new NN_AI(field);
         aiPTR->importNetwork(AI_WINNER_NAME);
         result.append(aiPTR);
-
-        // creat 3 new random
-        for (int j = 0; j < POOL_RAND_AI; ++j) {
-            aiPTR = new NN_AI();
-            result.append(aiPTR);
-        }
 
         // check if there is a winner from a previous tournament
         QFile file2(QDir::currentPath() + "/" + AI_OLD_WINNER_NAME + ".txt");
         if(!file2.exists()) {
             qDebug()<<"No old Winner existing";
 
-            //creat variants
-            for (int j = 0; j < POOL_SIZE-(POOL_RAND_AI+1); ++j) {
-                aiPTR = new NN_AI();
-                aiPTR->importNetwork(AI_WINNER_NAME);
-                aiPTR->tweekNetwork();
+            // creat random ai beceaus first tourn
+            // concluded cause no old winner existing
+            for (int j = 0; j < POOL_SIZE-1; ++j) {
+                aiPTR = new NN_AI(field);
                 result.append(aiPTR);
             }
         }else
         {
+
+            // creat N new randomchild from old gen
+            for (int j = 0; j < POOL_RAND_AI; ++j) {
+                aiPTR = new NN_AI(field);
+                aiPTR->importNetworkPartialy(AI_OLD_WINNER_NAME);
+                result.append(aiPTR);
+            }
+
             // creat children
             for (int j = 0; j < POOL_CHILD_AI; ++j) {
-                aiPTR = new NN_AI();
+                aiPTR = new NN_AI(field);
                 aiPTR->creatChild(AI_WINNER_NAME,AI_OLD_WINNER_NAME);
                 result.append(aiPTR);
             }
+
             // creat mutated children
             for (int j = 0; j < POOL_MUTANT_AI; ++j) {
-                aiPTR = new NN_AI();
+                aiPTR = new NN_AI(field);
                 aiPTR->creatChild(AI_WINNER_NAME,AI_OLD_WINNER_NAME);
                 aiPTR->tweekNetwork();
                 result.append(aiPTR);
             }
         }
     }
-    aiPTR = new NN_AI();
+    aiPTR = new NN_AI(field);
     aiPTR->importNetwork(AI_WINNER_NAME);
     aiPTR->printNetwork(AI_OLD_WINNER_NAME);
     delete aiPTR;

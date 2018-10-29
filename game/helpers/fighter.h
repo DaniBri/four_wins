@@ -8,13 +8,12 @@
 class Fighter
 {
 public:
-    Fighter(int stateToPlay);
+    Fighter(int stateToPlay, Gamefield *field);
     int aiPlayOnce();
     void loadAI(QString aiName);
-    void initRelations(Gamefield* field);
 private:
     int stateToPlay;
-    NN_AI ai;
+    NN_AI* ai;
     Gamefield* field;
 };
 

@@ -26,7 +26,6 @@ private:
     QVector<NN_AI *> initTournametsAI();
     void playGame();
     void playTournament();
-    void showFieldToAI();
     NN_AI* poolFight(QVector<NN_AI*> ais, int start);
     void aiSwitchSides();
     void clearTourAI(QVector<NN_AI*> tournametsAI);

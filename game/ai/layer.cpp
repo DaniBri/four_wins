@@ -102,16 +102,6 @@ void Layer::tweekLayer()
     }
 }
 
-void Layer::randomizeLayer()
-{
-    for (int i = 0; i < nodes.size(); ++i) {
-        for (int j = 0; j < this->nodes.at(i)->weights.size(); ++j) {
-            this->nodes.at(i)->weights.replace(j,randRange(-NN_WEIGHTS_RANGE, NN_WEIGHTS_RANGE));
-        }
-        this->nodes.at(i)->bias = randRange(-NN_BIASES_RANGE, NN_BIASES_RANGE) + tweekValue();
-    }
-}
-
 QVector<double> Layer::getNodesValues()
 {
     QVector<double> result;

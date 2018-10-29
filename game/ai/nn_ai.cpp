@@ -2,8 +2,9 @@
 #include "basic/gamefield.h"
 
 
-NN_AI::NN_AI()
+NN_AI::NN_AI(Gamefield* field)
 {
+    this->field = field;
     initNetwork();
 }
 
@@ -72,13 +73,6 @@ void NN_AI::tweekNetwork()
 {
     for (int i = 0; i < this->layerVec.size(); ++i) {
         this->layerVec.at(i)->tweekLayer();
-    }
-}
-
-void NN_AI::randomizeNetwork()
-{
-    for (int i = 0; i < this->layerVec.size(); ++i) {
-        this->layerVec.at(i)->randomizeLayer();
     }
 }
 
@@ -151,11 +145,6 @@ void NN_AI::creatChild(QString mother, QString father)
 {
     this->importNetwork(mother);
     this->importNetworkPartialy(father);
-}
-
-void NN_AI::initRelations(Gamefield *field)
-{
-    this->field = field;
 }
 
 void NN_AI::initNetwork()

@@ -1,10 +1,9 @@
 AI:
 fix pool size and pool per tournament issue
 ---------
-set a ratio of ai in pool. between rand ais and tweeked ais
-------------
-instead of killing previous ai who was winner in tourn keep it and modivy it with parameters from new best ai
-then in next tourn have new best, modified old best, random and tweeked new best,
+Make a controll that not two completly new random ais are fused together after two tournaments
+sol1: don't do a counter of new random ai winners and if two in row cancel second tournament
+sol2: edit that new random ais are actually not 100% random but only 50% random from between a random ai and oldwinner ai
 
 Game:
 states/screens
@@ -13,9 +12,3 @@ Designe:
 Different Themes
 UI
 
-ERROR:
-after 3606 tournaments get error
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-?????
---------

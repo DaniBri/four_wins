@@ -19,14 +19,13 @@ public:
     ~ Layer();
     void calcValues(QVector<double> inputs);      // calculate all values of the nodes according to theyr weights and biases
     void tweekLayer();
-    void randomizeLayer();
     QVector<double> getNodesValues();
     QString getWeightsAndBias();
     void setWeights(QVector<QStringList> strings);
     void setBiases(QStringList strings);
     void setWeightsPartialy(QVector<QStringList> strings);
     void setBiasesPartialy(QStringList strings);
-    double randRange(int min, int max);
+
 
 private:
     QVector<Nodes*> nodes;
@@ -34,6 +33,7 @@ private:
     double fastSigmoid(double x);
     void initLayer(int nodesNBR, int inputsNBR);
     double tweekValue();
+    double randRange(int min, int max);
 };
 
 #endif // LAYER_H
