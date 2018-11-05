@@ -19,13 +19,13 @@ int main(int argc, char *argv[])
     w.initRelations(&g);
     w.show();
 
-    // true to creat ai with given generation number else ai fighting time!!!
+    // True to create AI with given generation number else AI fighting time!!!
     // Note if training is done after training it is possible to make a 2 player mod
-    // if ai fighting each other is chosen it is posible to do player agains ai afterwards
+    // If AI fighting each other is chosen it is possible to do player against AI afterwards
 
-    bool training = 1;
+    bool training = TRAINING;
     bool player_vs_ai = true;
-    int tournaments = 1000;
+    int tournaments = NBR_TOURN;
     int fights = 200;
     // train AI else make them fight
     if(training)
@@ -33,14 +33,14 @@ int main(int argc, char *argv[])
         aiManager.playNTournaments(tournaments);
     }else
     {
-        // load and Fight AI
+        // Load and Fight AI
         w.initRelationAI1(&opponent1);
         opponent1.loadAI("winnerAI");
 
         w.initRelationAI2(&opponent2);
         opponent2.loadAI("winnerAI");
 
-        // test run to compare opponents
+        // Test run to compare opponents
         int ai1Vic = 0;
         int ai2Vic = 0;
 

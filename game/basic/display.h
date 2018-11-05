@@ -20,7 +20,7 @@ public:
     void initRelations(Gamefield* field);
     void initRelationAI1(Fighter* someAI);
     void initRelationAI2(Fighter* someAI);
-    int simClick(); //function simulating click on screen to macke ai play
+    int simClick(); //function simulating click on screen to make AI play
 private:
     void drawBoard();
     void paintToken(int column, int row, QColor color);

@@ -30,7 +30,7 @@ void Layer::initLayer(int nodesNBR, int inputsNBR)
     Nodes* tempNode;
     for (int i = 0; i < nodesNBR; ++i) {
 
-        // init new node
+        // Initialize new node
         tempNode = new Nodes();
         tempNode->bias = randRange(-NN_BIASES_RANGE, NN_BIASES_RANGE);
         for (int i = 0; i < inputsNBR; ++i) {
@@ -46,17 +46,17 @@ double Layer::randRange(int min, int max)
     return min + f * (max - min);
 }
 
-double Layer::tweekValue()
+double Layer::tweakValue()
 {
     return randRange(-1,1);
 }
 
-// makes summ of all given node weights*inputs
+// Makes sum of all given node weights*inputs
 double Layer::calcInputWeights(QVector<double> inputs,int currentNode)
 {
     double result = 0;
 
-    // checking if every connection between input and node has a weight
+    // Checking if every connection between input and node has a weight
     if(inputs.size() == this->nodes.at(0)->weights.size())
     {
         for (int i = 0; i < inputs.size(); ++i) {
@@ -69,35 +69,35 @@ double Layer::calcInputWeights(QVector<double> inputs,int currentNode)
     return result;
 }
 
-void Layer::tweekLayer()
+void Layer::tweakLayer()
 {
     double temp1;
     double temp2;
-    // tweek weight and bias
+    // Tweak weight and bias
     for (int i = 0; i < nodes.size(); ++i) {
         for (int j = 0; j < this->nodes.at(i)->weights.size(); ++j) {
-            //changing weight and random
-            temp1 = this->nodes.at(i)->weights.at(j) + tweekValue();
+            // Changing weight and random
+            temp1 = this->nodes.at(i)->weights.at(j) + tweakValue();
             this->nodes.at(i)->weights.replace(j,temp1);
         }
-        //changing bias at random but still needs to be smaller then sum of weight
-        temp1 = this->nodes.at(i)->bias + tweekValue(); // representing new bias
+        // Changing bias at random but still needs to be smaller then sum of weight
+        temp1 = this->nodes.at(i)->bias + tweakValue(); // representing new bias
         temp2 = 0;                                      // sum of weights
         for (int j = 0; j < this->nodes.at(i)->weights.size(); ++j) {
-            //get sum of weight from this node
+            // Get sum of weight from this node
             temp2 += this->nodes.at(i)->weights.at(j);
         }
 
-        //check if bias is valid
+        // Check if bias is valid
         if(temp2 > temp1)
         {
             this->nodes.at(i)->bias = temp1;
         }
 
-        // if current bias bigger then weighted sum correct it
+        // If current bias bigger then weighted sum correct it
         if(this->nodes.at(i)->bias >= temp2)
         {
-            this->nodes.at(i)->bias = temp2 - abs(tweekValue());
+            this->nodes.at(i)->bias = temp2 - abs(tweakValue());
         }
     }
 }
@@ -115,7 +115,7 @@ QVector<double> Layer::getNodesValues()
 QString Layer::getWeightsAndBias()
 {
     QString result;
-    // get weights
+    // Get weights
     for (int i = 0; i < this->nodes.size(); ++i) {
         for (int j = 0; j < this->nodes.at(i)->weights.size()-1; ++j) {
             result += QString::number(this->nodes.at(i)->weights.at(j)) + ",";
@@ -123,7 +123,7 @@ QString Layer::getWeightsAndBias()
         result += QString::number(this->nodes.at(i)->weights.at(this->nodes.at(i)->weights.size()-1))+"\r\n";
     }
 
-    //get biases
+    // Get biases
     for (int i = 0; i < this->nodes.size()-1; ++i) {
         result += QString::number(this->nodes.at(i)->bias)+",";
     }
@@ -131,16 +131,16 @@ QString Layer::getWeightsAndBias()
     return result;
 }
 
-// give weights for nodes of this layer
+// Give weights for nodes of this layer
 bool ok = false;
 void Layer::setWeights(QVector<QStringList> strings)
 {
     QStringList templist;
     if(strings.size() == nodes.size()){
-        //go past every node / full vector(list)
+        // Go past every node / full vector(list)
         for (int i = 0; i < strings.size(); ++i) {
             templist = strings.at(i);
-            //go past every weight / stringlist value
+            // Go past every weight / string list value
             for (int j = 0; j < strings.at(i).size(); ++j) {
                 this->nodes.at(i)->weights.replace(j,templist.at(j).toDouble(&ok));
 
@@ -152,7 +152,7 @@ void Layer::setWeights(QVector<QStringList> strings)
     }
 }
 
-// give biases for nodes of this layer
+// Give biases for nodes of this layer
 void Layer::setBiases(QStringList strings)
 {
     if(strings.size() == nodes.size()){
@@ -169,10 +169,10 @@ void Layer::setWeightsPartialy(QVector<QStringList> strings)
 {
     QStringList templist;
     if(strings.size() == nodes.size()){
-        //go past every node / full vector(list)
+        // Go past every node / full vector(list)
         for (int i = 0; i < strings.size(); ++i) {
             templist = strings.at(i);
-            //go past every weight / stringlist value
+            // Go past every weight / string list value
             for (int j = 0; j < strings.at(i).size(); ++j) {
                 if(rand()%HERITAGE_RATE == 1)
                     this->nodes.at(i)->weights.replace(j,templist.at(j).toDouble(&ok));

@@ -3,23 +3,23 @@
 Manager::Manager(Gamefield *field)
 {
     this->field = field;
-    // seed for randomizer generator
+    // Seed for random generator
     qsrand(QTime::currentTime().msec());
     initGame();
 }
 
 void Manager::playNTournaments(int nbrOfTourns)
 {
-    //ready timer and play
+    // Ready timer
     QElapsedTimer timer;
     timer.start();
 
-    //play the tournaments and store winner
+    // Play the tournaments and store winner
     for (int i = 0; i < nbrOfTourns; ++i) {
         playTournament();
         qDebug()<< "Tournaments "<< i + 1 <<"/"<<nbrOfTourns<<"done";
     }
-    qDebug() << "The tournamet took" << timer.elapsed()/1000 << "seconds";
+    qDebug() << "The tournament took" << timer.elapsed()/1000 << "seconds";
 
 }
 
@@ -40,54 +40,52 @@ void Manager::playGame()
 
 void Manager::playTournament()
 {
-    // Creat the ai in vector that play. 25 ai split in pool of 5. first is clone of original ai. 2-4th are tweeked ones.
-    // and 5th ai is complitly randomly generated.
+    // Create the AI in vector that play. 25 AI split in pool of 5. first is clone of original AI. 2-4th are tweaked ones.
+    // and 5th AI is completely randomly generated.
     QVector<NN_AI*> tournametsAI = initTournametsAI();
 
-    // in each pool every single ai playes N games against every other one. AI with most winns goes to next stage
+    // In each pool every single AI plays N games against every other one. AI with most wins goes to next stage.
     QVector<NN_AI*> winners;
     for (int i = 0; i < POOL_PER_TOURNAMENT; ++i) {
         winners.append(poolFight(tournametsAI,i*POOL_SIZE));
     }
 
-    // do one pool out of the winners and let them play.
-    // print out winenr of final pool as winner ai
+    // Do one pool out of the winners and let them play.
+    // Print out winner of final pool as winner AI.
     poolFight(winners,0)->printNetwork(AI_WINNER_NAME);
 
 
-    //delet all the AI's created for tournament
+    // Delete all the AI's created for tournament
     clearTourAI(tournametsAI);
 }
 
 
 
-// start is the position in vector where First ai of a pool is
-// Pool size min is defined in globaldefiner
+// Start is the position in vector where First AI of a pool is
 NN_AI *Manager::poolFight(QVector<NN_AI*> ais, int start)
 {
-    // check if enouth ai's avaible for full pool
+    // Check if enough AI's available for full pool
     if(ais.size() < start+POOL_SIZE){
         qDebug()<<"ERROR 010: Vector of AIs is to small";
         return NULL;
     }
 
     QVector<NN_AI*> poolAIs;
-    // copie the ais from pool to new vector, making it easier to work with
-    // for example if init vector hold all tournament players
+    // Copy the AIs from pool to new vector, making it easier to work with
     for (int i = 0; i < POOL_SIZE; ++i) {
         poolAIs.append(ais.at(i+start));
     }
 
 
-    // make ais play each other 1 time every single one of them and mark winner
+    // Make every AI play each other 1 time every single other one and mark winner
     int winnCounter[POOL_SIZE] = {0};
 
-    // go pst full pool setting ai1 to first ai in vector
+    // Go past full pool setting ai1 to first AI in vector
     for (int i = 0; i < POOL_SIZE; ++i) {
         this->ai1 = poolAIs.at(i);
 
-        // make ai selected from vector play against every single ai sored next in vector
-        // to do so store ai in AI2
+        // make AI selected from vector play against every single AI stored next in vector
+        // to do so store AI in AI2
         for (int j = i+1; j < POOL_SIZE; ++j) {
             this->ai2 = poolAIs.at(j);
 
@@ -101,15 +99,15 @@ NN_AI *Manager::poolFight(QVector<NN_AI*> ais, int start)
                     winnCounter[j]++;
                     break;
                 default:
-                    // ai shouldn't be punished for draws
+                    // AI shouldn't be punished for draws
                     winnCounter[i]++;
                     winnCounter[j]++;
                     break;
                 }
-                //switch who playes wird
+                // Switch who plays first
                 aiSwitchSides();
                 playGame();
-                // same switch as befor with small changes according to switch
+                // Same switch as before with small changes according to switch
                 switch (lastWinner) {
                 case 1:
                     winnCounter[j]++;
@@ -118,18 +116,18 @@ NN_AI *Manager::poolFight(QVector<NN_AI*> ais, int start)
                     winnCounter[i]++;
                     break;
                 default:
-                    // ai shouldn't be punished for draws
+                    // AI shouldn't be punished for draws
                     winnCounter[i]++;
                     winnCounter[j]++;
                     break;
                 }
-                //switch ai back into position for next match
+                // Switch AI back into position for next match
                 aiSwitchSides();
             }
         }
     }
 
-    //check counter for winner
+    // Check counter for winner
     int poolWinner = 0;
     for (int i = 1; i < POOL_SIZE; ++i) {
         if(winnCounter[poolWinner] < winnCounter[i])
@@ -138,7 +136,7 @@ NN_AI *Manager::poolFight(QVector<NN_AI*> ais, int start)
         }
     }
 
-    //send back winner
+    // Send back winner
     //qDebug()<<"Pool:"<<start/POOL_PER_TOURNAMENT<<" Winner at"<<poolWinner;
     return poolAIs.at(poolWinner);
 }
@@ -152,7 +150,7 @@ void Manager::aiSwitchSides()
 
 void Manager::clearTourAI(QVector<NN_AI *> tournametsAI)
 {
-    // delete all AIs after tournament and empty ai vector
+    // Delete all AIs after tournament and empty ai vector
     while(!tournametsAI.empty())
     {
         delete tournametsAI.first();
@@ -160,8 +158,8 @@ void Manager::clearTourAI(QVector<NN_AI *> tournametsAI)
     }
 }
 
-// makes AIs play a move on board switching between players.
-// ai board or ai needs to check if it realy theyr turn.
+// Makes AIs play a move on board switching between players.
+// AI board or AI needs to check if it is really corresponding turn.
 bool Manager::playOneMove()
 {
     switch (gameState) {
@@ -220,7 +218,7 @@ void Manager::initGame()
 QVector<NN_AI*> Manager::initTournametsAI()
 {
     QVector<NN_AI*> result;
-    // load some given ai if in folder with winner name
+    // load some given AI if in folder with winner name
     QFile file1(QDir::currentPath() + "/"+AI_WINNER_NAME+".txt");
     if (!file1.exists()) {
         NN_AI temp(field);
@@ -230,7 +228,7 @@ QVector<NN_AI*> Manager::initTournametsAI()
     NN_AI* aiPTR;
     for (int i = 0; i < POOL_PER_TOURNAMENT; ++i) {
 
-        // copie main AI
+        // Copy main AI
         aiPTR = new NN_AI(field);
         aiPTR->importNetwork(AI_WINNER_NAME);
         result.append(aiPTR);
@@ -240,8 +238,8 @@ QVector<NN_AI*> Manager::initTournametsAI()
         if(!file2.exists()) {
             qDebug()<<"No old Winner existing";
 
-            // creat random ai beceaus first tourn
-            // concluded cause no old winner existing
+            // Create random AI because first turn
+            // Concluded cause no old winner existing
             for (int j = 0; j < POOL_SIZE-1; ++j) {
                 aiPTR = new NN_AI(field);
                 result.append(aiPTR);
@@ -249,25 +247,25 @@ QVector<NN_AI*> Manager::initTournametsAI()
         }else
         {
 
-            // creat N new randomchild from old gen
+            // Create N new random child from old gen
             for (int j = 0; j < POOL_RAND_AI; ++j) {
                 aiPTR = new NN_AI(field);
                 aiPTR->importNetworkPartialy(AI_OLD_WINNER_NAME);
                 result.append(aiPTR);
             }
 
-            // creat children
+            // Create children
             for (int j = 0; j < POOL_CHILD_AI; ++j) {
                 aiPTR = new NN_AI(field);
                 aiPTR->creatChild(AI_WINNER_NAME,AI_OLD_WINNER_NAME);
                 result.append(aiPTR);
             }
 
-            // creat mutated children
+            // Create mutated children
             for (int j = 0; j < POOL_MUTANT_AI; ++j) {
                 aiPTR = new NN_AI(field);
                 aiPTR->creatChild(AI_WINNER_NAME,AI_OLD_WINNER_NAME);
-                aiPTR->tweekNetwork();
+                aiPTR->tweakNetwork();
                 result.append(aiPTR);
             }
         }

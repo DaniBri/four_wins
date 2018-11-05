@@ -14,15 +14,13 @@ Gamefield::~Gamefield()
 
 }
 
-// placing token in top of column and drawing int on board
+// placing token in top of column
 bool Gamefield::placeToken(int column, int player)
 {
     for (int i = NBR_HOLE_VER-1; i >= 0; --i) {
         if(this->board[column][i] == 0)
         {
             this->board[column][i] = player;
-            // remove comments to see step by step in consol
-            //displayBoard();
             return true;
         }
     }
@@ -41,7 +39,7 @@ int Gamefield::getBoardAt(int x, int y)
 
 void Gamefield::initBoard()
 {
-    // init board
+    // Initialize board
     for (int i = 0; i < NBR_HOLE_HOR; ++i) {
         for (int j = 0; j < NBR_HOLE_VER; ++j) {
             this->board[i][j] = 0;
@@ -54,7 +52,7 @@ void Gamefield::initBoard()
 int Gamefield::action(int column)
 {
     int result = 0;
-    //trying to place token in fiven column
+    // Trying to place token in five column
     switch (this->gamestate) {
     case PLAYER1:
         if(placeToken( column,  1))
@@ -85,7 +83,7 @@ int Gamefield::action(int column)
         break;
     }
 
-    //in case of full board ends in draw
+    // In case of full board, game ends in draw
     bool boardfull = true;
     for (int i = 0; i < NBR_HOLE_VER; ++i) {
         for (int j = 0; j < NBR_HOLE_HOR; ++j) {
@@ -111,7 +109,7 @@ bool Gamefield::winCondition(int player)
     bool won = false;
     int counter = 0;
 
-    // check rows
+    // Check rows
     for (int i = 0; i < NBR_HOLE_VER; ++i) {
         counter = 0;
         for (int j = 0; j < NBR_HOLE_HOR; ++j) {
@@ -129,7 +127,7 @@ bool Gamefield::winCondition(int player)
         }
     }
 
-    // check columns
+    // Check columns
     for (int i = 0; i < NBR_HOLE_HOR; ++i) {
         counter = 0;
         for (int j = 0; j < NBR_HOLE_VER; ++j) {
@@ -147,7 +145,7 @@ bool Gamefield::winCondition(int player)
         }
     }
 
-    // check diagonal left -> right && up -> down
+    // Check diagonal from left -> right && up -> down
     for (int i = 0; i < NBR_HOLE_HOR; ++i) {
         for (int j = 0; j < NBR_HOLE_VER; ++j) {
             counter = 0;
@@ -170,7 +168,7 @@ bool Gamefield::winCondition(int player)
         }
     }
 
-    // check diagonal right -> left && up -> down
+    // Check diagonal from right -> left && up -> down
     for (int i = 0; i < NBR_HOLE_HOR; ++i) {
         for (int j = 0; j < NBR_HOLE_VER; ++j) {
             counter = 0;
@@ -200,11 +198,11 @@ bool Gamefield::winCondition(int player)
 
 void Gamefield::displayBoard()
 {
-    for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
+    for(int i = 0; i < NBR_HOLE_VER; i++)  // Loop for  lines
     {
-        for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+        for(int j = 0; j < NBR_HOLE_HOR; j++)  // Loop for the elements on the line
         {
-            switch (this->board[j][i]) { // display the current element out of the array
+            switch (this->board[j][i]) { // Display the current element out of the array
             case 1:
                 cout << 1;
                 break;
@@ -216,7 +214,7 @@ void Gamefield::displayBoard()
                 break;
             }
         }
-        cout << endl;  // when the inner loop is done, go to a new line
+        cout << endl;  // When the inner loop is done, go to a new line
     }
 }
 
@@ -236,9 +234,9 @@ QVector<double> Gamefield::getInputs()
     QVector<double> result;
 
     if (gamestate == PLAYER1) {
-        for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
+        for(int i = 0; i < NBR_HOLE_VER; i++)
         {
-            for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+            for(int j = 0; j < NBR_HOLE_HOR; j++)
             {
                 result.append(this->board[j][i]);
             }
@@ -246,9 +244,9 @@ QVector<double> Gamefield::getInputs()
         return result;
     }
     if (gamestate == PLAYER2) {
-        for(int i = 0; i < NBR_HOLE_VER; i++)  // loop for  lines
+        for(int i = 0; i < NBR_HOLE_VER; i++)
         {
-            for(int j = 0; j < NBR_HOLE_HOR; j++)  // loop for the elements on the line
+            for(int j = 0; j < NBR_HOLE_HOR; j++)
             {
                 result.append(-this->board[j][i]);
             }

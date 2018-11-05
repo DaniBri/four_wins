@@ -12,11 +12,11 @@
 Display::Display(QWidget *parent) :
     QWidget(parent)
 {
-    //Background color palett
+    // Background colour palette
     QPalette pal = palette();
     pal.setColor(QPalette::Background, Qt::black);
 
-    //Window setup
+    // Window set-up
     this->setFixedHeight(DISPLAY_HEIGHT);
     this->setFixedWidth(DISPLAY_WIDTH);
     this->setWindowTitle("Four Wins");
@@ -30,15 +30,14 @@ Display::~Display()
 
 void Display::paintToken(int column, int row, QColor color)
 {
-    // drawing basic lines of board
+    // Drawing basic lines of board
     QPainter* painter = new QPainter(this);
 
-    // how to get filled ellipse
+    // How to get filled ellipse
     painter->setBrush(color);
 
-    // painting circle
+    // Painting circle
     painter->drawEllipse(column*DISPLAY_WIDTH/NBR_HOLE_HOR+OFFSET_HOR,row*DISPLAY_HEIGHT/NBR_HOLE_VER+OFFSET_VER,HOLE_SIZE,HOLE_SIZE);
-
     delete painter;
 }
 
@@ -73,13 +72,13 @@ int Display::simClick()
 
 void Display::drawBoard()
 {
-    // drawing basic lines of board
+    // Drawing basic lines of board
     QPainter* painter = new QPainter(this);
 
-    // how to get filled ellipse
+    // How to get filled ellipse
     painter->setBrush(Qt::white);
 
-    // draw holes 7x6
+    // Draw holes according to defined parameters in definer file
     for (int i = 0; i < NBR_HOLE_HOR; ++i) {
         for (int j = 0; j < NBR_HOLE_VER; ++j) {
             if(this->field != NULL){
@@ -94,12 +93,12 @@ void Display::drawBoard()
                     paintToken(i,j,Qt::red);
                     break;
                 default:
-                    qDebug()<<"ERROR 001: No Valide data on Board";
+                    qDebug()<<"ERROR 001: No valid data on board";
                     break;
                 }
             }else
             {
-                qDebug()<<"ERROR 003: No Gamefield known";
+                qDebug()<<"ERROR 003: No gamefield known";
             }
         }
     }
@@ -114,15 +113,15 @@ void Display::paintEvent(QPaintEvent*)
 void Display::mouseReleaseEvent(QMouseEvent *e)
 {
     int playerBefore = this->field->getState();
-    //managing what ai to play on click
+	
+    // Managing what AI to play on click
     if(this->opponent1 != NULL){
         this->opponent1->aiPlayOnce();
         if(playerBefore != this->field->getState())
             return;
     }
 
-    // if ai is missing user can play
+    // If AI is missing user can play
     int column = round(e->x() * NBR_HOLE_HOR/DISPLAY_WIDTH);
     this->field->action(column);
-
 }

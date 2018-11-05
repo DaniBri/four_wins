@@ -26,15 +26,15 @@ int NN_AI::calcOut(QVector<double> boardInput)
         this->layerVec.at(i)->calcValues(this->layerVec.at(i-1)->getNodesValues());
     }
 
-    // store results from nodes in vector
+    // Store results from nodes in vector
     QVector<double> nodeResult = this->layerVec.last()->getNodesValues();
 
-    // creat ranking from vector of results
+    // Create ranking from vector of results
     QVector<int> ranking;
     int temp;
     for (int i = 0; i < nodeResult.size(); ++i) {
         temp = 0;
-        // looking for node with higest value
+        // Looking for node with highest value
         for (int j = 0; j < nodeResult.size(); ++j) {
             if(nodeResult.at(j) != -2)
             {
@@ -45,15 +45,15 @@ int NN_AI::calcOut(QVector<double> boardInput)
             }
         }
 
-        // store in ranking
+        // Store in ranking
         ranking.append(temp);
 
-        // remove winner from vector
+        // Remove winner from vector
         // -2 can be used thanks to sigmoid
         nodeResult.replace(temp, -2);
     }
 
-    // set result to free place according to ranking
+    // Set result to free place according to ranking
     for (int i = 0; i < NBR_HOLE_HOR; ++i) {
         if(!checkColumnFull(ranking.first()))
         {
@@ -61,7 +61,7 @@ int NN_AI::calcOut(QVector<double> boardInput)
             break;
         }else
         {
-            // if column full remove column from ranking
+            // If column full remove column from ranking
             ranking.removeFirst();
         }
     }
@@ -69,10 +69,10 @@ int NN_AI::calcOut(QVector<double> boardInput)
     return result;
 }
 
-void NN_AI::tweekNetwork()
+void NN_AI::tweakNetwork()
 {
     for (int i = 0; i < this->layerVec.size(); ++i) {
-        this->layerVec.at(i)->tweekLayer();
+        this->layerVec.at(i)->tweakLayer();
     }
 }
 
@@ -94,13 +94,13 @@ void NN_AI::importNetwork(QString filename)
 {
     QFile file(QDir::currentPath() + "/" + filename + ".txt");
     if(!file.open(QIODevice::ReadOnly)) {
-        qDebug()<<"No such file in dir";
+        qDebug()<<"No such file in directory";
     }
 
     QTextStream in(&file);
     QVector<QStringList> fullVector;
 
-    // loop file and store in list
+    // Loop file and store in list
     while(!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(",");
@@ -108,8 +108,9 @@ void NN_AI::importNetwork(QString filename)
     }
     file.close();
     fullVector.removeLast();
-    // preping vector to cut int slices for different layers
-    if(fullVector.size() == NN_SIZE_OF_SAVE)// stored data has right dim
+	
+    // Preparing vector to be cut in slices for different layers
+    if(fullVector.size() == NN_SIZE_OF_SAVE)// Check if stored data has right dim
     {
         // do all layers
         QVector<QStringList> templayer;
@@ -120,16 +121,16 @@ void NN_AI::importNetwork(QString filename)
                 templayer.append(fullVector.at(0));
                 fullVector.removeFirst();
             }
-            //set weight
+            // Set weight
             this->layerVec.at(i)->setWeights(templayer);
             templayer.clear();
 
-            // read biases on next line nad set them
+            // Read biases on next line and set them
             this->layerVec.at(i)->setBiases(fullVector.at(0));
             fullVector.removeFirst();
         }
 
-        // do output layer
+        // Do output layer
         for (int i = 0; i < NBR_HOLE_HOR; ++i) {
             templayer.append(fullVector.at(0));
             fullVector.removeFirst();
@@ -137,7 +138,7 @@ void NN_AI::importNetwork(QString filename)
         this->layerVec.last()->setBiases(fullVector.at(0));
         this->layerVec.last()->setWeights(templayer);
     }else{
-        qDebug()<<"file to load corupted";
+        qDebug()<<"Loaded file is corrupted";
     }
 }
 
@@ -176,13 +177,13 @@ void NN_AI::importNetworkPartialy(QString filename)
 {
     QFile file(QDir::currentPath() + "/" + filename + ".txt");
     if(!file.open(QIODevice::ReadOnly)) {
-        qDebug()<<"No such file in dir";
+        qDebug()<<"No such file in directory";
     }
 
     QTextStream in(&file);
     QVector<QStringList> fullVector;
 
-    // loop file and store in list
+    // Loop file and store in list
     while(!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(",");
@@ -190,10 +191,9 @@ void NN_AI::importNetworkPartialy(QString filename)
     }
     file.close();
     fullVector.removeLast();
-    // preping vector to cut int slices for different layers
-    if(fullVector.size() == NN_SIZE_OF_SAVE)// stored data has right dim
+    if(fullVector.size() == NN_SIZE_OF_SAVE)
     {
-        // do all layers
+        // Do all layers
         QVector<QStringList> templayer;
         for (int i = 0; i < this->layerVec.size()-1; ++i) {
 
@@ -202,11 +202,11 @@ void NN_AI::importNetworkPartialy(QString filename)
                 templayer.append(fullVector.at(0));
                 fullVector.removeFirst();
             }
-            //set weight
+            // Set weight
             this->layerVec.at(i)->setWeightsPartialy(templayer);
             templayer.clear();
 
-            // read biases on next line nad set them
+            // Read biases on next line and set them
             this->layerVec.at(i)->setBiasesPartialy(fullVector.at(0));
             fullVector.removeFirst();
         }
@@ -219,6 +219,6 @@ void NN_AI::importNetworkPartialy(QString filename)
         this->layerVec.last()->setBiasesPartialy(fullVector.at(0));
         this->layerVec.last()->setWeightsPartialy(templayer);
     }else{
-        qDebug()<<"file to load corupted";
+        qDebug()<<"Loaded file is corrupted";
     }
 }

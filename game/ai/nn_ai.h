@@ -15,17 +15,17 @@ class NN_AI
 public:
     NN_AI(Gamefield* field);
     ~NN_AI();
-    int calcOut(QVector<double> boardInput);        // send out answer
-    void tweekNetwork();                            // tweek Values of Network
-    void printNetwork(QString filename);            // exporting Netwrok
-    void importNetwork(QString filename);           // importing Network
+    int calcOut(QVector<double> boardInput);        // Send out answer
+    void tweakNetwork();                            // Tweak Values of Network
+    void printNetwork(QString filename);            // Exporting Network
+    void importNetwork(QString filename);           // Importing Network
     void creatChild(QString mother,QString father);
     void importNetworkPartialy(QString filename);
 
 private:
     QVector<Layer*> layerVec;
     Gamefield* field;
-    void initNetwork();                             // initialized with randomize Value for layers
+    void initNetwork();                             // Initialized with randomize Value for layers
     QString networkToString();
     bool checkColumnFull(int x);
 
